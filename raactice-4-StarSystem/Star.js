@@ -5,10 +5,16 @@ function Star(r, tier, ChildNum) {
   this.ChildNum = ChildNum;
 }
 
+
 function AddStar(ParentStar) {
-  for (i = 0; i < ParentStar.length; i++) {
+  for (let i = 0; i < ParentStar.length; i++) {
+    /*
+    console.log("分隔");
+    console.log(ParentStar.length);
+    console.log(i);
+    */
     if (ParentStar[i].tier > 0) {
-      for (j = 0; j < ParentStar[i].ChildNum; j++) {
+      for (let j = 0; j < ParentStar[i].ChildNum; j++) {
         ParentStar[i].child[j] = new Star((ParentStar[i].r) / 2.,
           (ParentStar[i].tier) - 1,
           ParentStar[i].ChildNum);
