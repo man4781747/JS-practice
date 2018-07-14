@@ -1,9 +1,9 @@
-var I_MazeSize_X = 100;
-var I_MazeSize_Y = 100;
+var I_MazeSize_X = 5;
+var I_MazeSize_Y = 5;
 var Ay_Maze = new Array((I_MazeSize_X * 2 - 1) * (I_MazeSize_Y * 2 - 1)).fill(50)
 var I_MazeLen_X = I_MazeSize_X * 2 - 1
 var I_MazeLen_Y = I_MazeSize_Y * 2 - 1
-var I_NewPoint = [50, 50];
+var I_NewPoint = [0, 0];
 var I_CanvasX = 800;
 var I_CanvasY = 800;
 
