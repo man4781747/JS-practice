@@ -53,5 +53,5 @@ function draw() {
   polygon(300, 300, 41, 4);
 
   fill(255, 255, 0);
-  polygon(mouseX, mouseY, 100, 7);
+  polygon(mouseX, mouseY, 100, 6);
 }
