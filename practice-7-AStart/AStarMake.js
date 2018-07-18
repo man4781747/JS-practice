@@ -32,7 +32,8 @@ function AStarMake(YLen, XLen){
     this.Ay_Maze[y][x].Type = 'END';
     for (let i=0;i<this.YLen;i++){
       for (let j=0;j<this.XLen;j++){
-        this.Ay_Maze[i][j].h = abs(this.Ay_Maze[i][j].y-y)*10 + abs(this.Ay_Maze[i][j].x-x)*10;
+        //this.Ay_Maze[i][j].h = abs(this.Ay_Maze[i][j].y-y)*10 + abs(this.Ay_Maze[i][j].x-x)*10;
+        this.Ay_Maze[i][j].h = floor(Math.sqrt(Math.pow((this.Ay_Maze[i][j].y-y)*10,2) + Math.pow((this.Ay_Maze[i][j].x-x)*10,2)));
       }
     }
   }
@@ -147,10 +148,12 @@ function AStarMake(YLen, XLen){
         }
         rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
         fill(0);
-        text(this.Ay_Maze[i][j].h, 5+j*F_L, (F_H-5)+i*F_H);
-        text(this.Ay_Maze[i][j].g, (F_L-15)+j*F_L, 15+i*F_H);
-        text(this.Ay_Maze[i][j].f, (F_L-15)+j*F_L, (F_H-5)+i*F_H);
-        text(i*this.XLen+j, 5+j*F_L, 15+i*F_H);
+
+        
+        //text(this.Ay_Maze[i][j].h, 5+j*F_L, (F_H-5)+i*F_H);
+        //text(this.Ay_Maze[i][j].g, (F_L-15)+j*F_L, 15+i*F_H);
+        //text(this.Ay_Maze[i][j].f, (F_L-15)+j*F_L, (F_H-5)+i*F_H);
+        //text(i*this.XLen+j, 5+j*F_L, 15+i*F_H);
         pop();
 
         push();
