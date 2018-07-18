@@ -1,5 +1,5 @@
-var I_MazeSize_X = 10;
-var I_MazeSize_Y = 10;
+var I_MazeSize_X = 50;
+var I_MazeSize_Y = 50;
 var Ay_MazeMake, Ay_AStar;
 
 function setup() {
