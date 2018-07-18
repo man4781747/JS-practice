@@ -1,11 +1,12 @@
 var Ay_AStar;
 
 function setup() {
-  Ay_AStar = new AStarMake(10, 10);
+  let Len = 20;
+  Ay_AStar = new AStarMake(Len, Len);
 
-  for (let i=4;i<10;i++) {
-    for (let j=0;j<10;j++) {
-      Ay_AStar.SetMag(j,i,0.1);
+  for (let i=int(Len/2);i<Len;i++) {
+    for (let j=Len/2;j<Len;j++) {
+      Ay_AStar.SetMag(j,i,1.2);
     }
   }
 /*
@@ -16,7 +17,7 @@ function setup() {
   Ay_AStar.SetWallPoint(0, 3);
 */
   Ay_AStar.SetStartPoint(0, 0);
-  Ay_AStar.SetEndPoint(9, 9);
+  Ay_AStar.SetEndPoint(Len-1, Len-1);
 
 
 
