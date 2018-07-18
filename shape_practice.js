@@ -8,17 +8,50 @@ function polygon(x, y, radius, npoints) {
   }
   endShape(CLOSE);
 }
+var bgcolor;
+var button_1;
+var htmlP ;
+var slider, input;
 
 function setup() {
-  createCanvas(windowWidth-3, windowHeight-4);
+  bgcolor = 0;
+
+  htmlP = createP('0w0 TEST!!!!!!!!!')
+  htmlP.position(windowWidth/2, windowHeight/4)
+  htmlP.size = 100;
+
+  button_1 = createElement('button','test');
+  button_1.position(windowWidth/2, windowHeight*3/4);
+
+  canvas = createCanvas(windowWidth/3, windowHeight/3);
+
+  canvas.position(windowWidth/3, windowHeight/3)
   rectMode(RADIUS);
-  createElement('button','test');
+
+  slider = createSlider(0,windowWidth/3,windowWidth/6);
+  slider.position(windowWidth/2,10+windowHeight*2/3);
+  //slider.width = 500;
+  console.log(slider);
+
+  input = createInput('Input HERE!!')
+  input.position(windowWidth/3,10+windowHeight*2/3);
+
+  button_1.mousePressed(changeColor);
+}
+
+function changeColor() {
+  bgcolor = color(random(255));
 }
 
 function draw() {
-  background(0);
-  fill(255);
+  //clear();
+  background(bgcolor);
   textFont('Times New Roman', 50);
+  fill(0);
+  fill(255,0,0)
+  ellipse(windowWidth/6, windowHeight/6,slider.value(),slider.value());
+  htmlP.html(input.value());
+  //button_1.position(windowWidth/2+random(-5,5), windowHeight/2);
   text("HI!!",mouseX,mouseY);
 }
 
