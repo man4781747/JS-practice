@@ -9,7 +9,7 @@ function polygon(x, y, radius, npoints) {
   endShape(CLOSE);
 }
 var bgcolor;
-var button_1;
+var button_1, button_2;
 var htmlP ;
 var slider, input;
 
@@ -22,6 +22,9 @@ function setup() {
 
   button_1 = createElement('button','test');
   button_1.position(windowWidth/2, windowHeight*3/4);
+
+  button_2 = createElement('button','迷宮');
+  button_2.position(windowWidth/2, windowHeight*5/6);
 
   canvas = createCanvas(windowWidth/3, windowHeight/3);
 
@@ -37,10 +40,12 @@ function setup() {
   input.position(windowWidth/3,10+windowHeight*2/3);
 
   button_1.mousePressed(changeColor);
+  button_2.mousePressed(x => location.assign("http://140.116.24.84:3000/Go/practice-8-AStartAndMaze/index.html"));
 }
 
 function changeColor() {
   bgcolor = color(random(255));
+  location.assign("http://140.116.24.84:3000");
 }
 
 function draw() {
