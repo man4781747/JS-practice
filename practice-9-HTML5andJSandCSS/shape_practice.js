@@ -10,13 +10,19 @@ function setup() {
 
   htmlP_1 = createP('這是第一列 ID= TEST1');
   htmlP_1.style('font-size', '50px');
-  htmlP_1.position(0, 0);
+  htmlP_1.style('textAlign', "center");
+  //htmlP_1.position(100, 0);
   htmlP_1.id = 'TEST1'
 
   htmlP_2 = createP('這是第二列 ID= TEST1');
+  htmlP_2.style('textAlign', "center");
   htmlP_2.style('font-size', '50px');
-  htmlP_2.position(0, windowHeight/4);
+  htmlP_2.style('width', '1000px');
+  htmlP_2.position(windowWidth/2-htmlP_2.width/2, windowHeight/4);
   htmlP_2.id = 'TEST1'
+
+  console.log(htmlP_2);
+
 
   htmlP_3 = createP('這是第三列 ID= TEST2');
   htmlP_3.style('font-size', '50px');
