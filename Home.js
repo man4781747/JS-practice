@@ -4,53 +4,32 @@
 //console.log(MakeTitle_);
 //MakeTitle_ = MakeTitle();
 //function windowResized() {}
-var AllElement = ['test1' ,'test2' ,'test3', 'test4', 'test5', 'test6', 'test7', 'test8'];
+var AllElement = ['練習-1: 亂數迷宮產生' ,'練習-2: 亂數迷宮產生(六角)' ,'練習-3: A*', '練習-4: 亂數迷宮+A*',
+                  '測試用 無東西-1','測試用 無東西-2','測試用 無東西-3','測試用 無東西-4','測試用 無東西-5',
+                  '測試用 無東西-6','測試用 無東西-7','測試用 無東西-8','測試用 無東西-9','測試用 無東西-10',
+                  '測試用 無東西-11','測試用 無東西-12'];
+var HomePath = 'http://140.116.24.84:3000/Go/'
+var AllElementPath = [HomePath+'practice-6-maze/index.html',
+                      HomePath+'practice-6.2-maze-Hexagon/index.html',
+                      HomePath+'practice-7-AStart/index.html',
+                      HomePath+'practice-8-AStartAndMaze/index.html',
+                      '測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西','測試用 無東西'
+                      ]
 
+var AllElementImage = ['./image/practice_6_maze.PNG',
+                       './image/practice_6.5_maze.PNG',
+                       './image/AStart.PNG',
+                       './image/maze+astar.PNG'
+]
 
 function setup() {
   noCanvas();
-  MakeTitle();
-  //MakeLeftWindow();
-  MakeMainWindow(AllElement);
-  /*
-  Div_1.id = 'divtest';
-  Div_1.class = 'divtest'
-  createCanvas(0,0);
-  var test = createP("test");
-  test.parent('divtest');
-
-*/
-  //Div_1.style('background-color', '#F00');
+  Go();
 }
 
 function draw() {
 }
 
 function windowResized() {
-  let Select_Div_1 = selectAll('.Title');
-  for (let i=0;i<Select_Div_1.length;i++) {
-    Select_Div_1[i].size(windowWidth,Select_Div_1[i].height)
-  }
-  let Select_MainWindow = selectAll('.MainWindow');
-  Select_MainWindow[0].remove();
-
-  MakeMainWindow(AllElement);
-
-/*
-  let Select_HyperlinksDiv = selectAll('.HyperlinksDiv');
-  for (let i=0;i<Select_HyperlinksDiv.length;i++) {
-    Select_HyperlinksDiv[i].remove();
-  }
-  */
-  //removeClass('HyperlinksDiv');
-
-/*
-  let Select_Div_2 = selectAll('.Div_2')
-  for (let i=0;i<Select_Div_2.length;i++) {
-    Select_Div_2[i].size(windowWidth-240,Select_Div_2[i].height)
-  }
-  /*
-  Div_1.size(windowWidth, 60);
-  Div_1_.size(windowWidth, 10);
-  */
+  ReFlash();
 }

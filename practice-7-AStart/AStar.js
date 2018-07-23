@@ -1,7 +1,7 @@
 var Ay_AStar;
 
 function setup() {
-  let Len = 20;
+  let Len = 10;
   Ay_AStar = new AStarMake(Len, Len);
 
   for (let i=int(Len/2);i<Len;i++) {
