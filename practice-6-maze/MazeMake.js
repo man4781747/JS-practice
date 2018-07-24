@@ -1,7 +1,11 @@
-function MazeMake(MazeYSize, MazeXSize) {
+function MazeMake(MazeYSize, MazeXSize, ParentDiv) {
   this.I_CanvasX = 800;
   this.I_CanvasY = 800;
-  createCanvas(this.I_CanvasX, this.I_CanvasY);
+  this.Maze = createCanvas(this.I_CanvasX, this.I_CanvasY);
+  this.Maze.id('Maze');
+
+  this.Maze.parent(ParentDiv);
+
   rectMode(CENTER);
   this.MazeXLen = MazeXSize*2-1;
   this.MazeYLen = MazeYSize*2-1;
@@ -43,7 +47,7 @@ function MazeMake(MazeYSize, MazeXSize) {
     line(0,0,0, this.I_CanvasY);
 
     pop();
-    
+
   }
 
   this.WallCheck = function (x, y) {

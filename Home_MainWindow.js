@@ -14,12 +14,33 @@ function MakeMainWindow(AllElementInsied) {
     ListWidth = 0;
   }
 
-  this.MainWindow.size(windowWidth-ListWidth, 10);
+  this.MainWindow.size(windowWidth-ListWidth, windowHeight-100);
   this.MainWindow.position(ListWidth,document.getElementById('Title-1').offsetTop+30);
-  //this.MainWindow.style('background-color', 'rgba(200, 200, 200, 0.1)');
+  this.MainWindow.style('background-color', 'rgba(200, 200, 200, 0.1)');
+  this.MainWindow.style('overflow-y', 'hidden');
+  this.MainWindow.style('overflow-x', 'hidden');
   //this.MainWindow.mouseOver(x => this.MainWindow.style('background-color', 'rgb(20, 20, 20, 0.2)'));
   //this.MainWindow.mouseOut(x => this.MainWindow.style('background-color', 'rgba(200, 200, 200, 0.2)'));
-  MakeHyperlinksDiv(AllElementInsied, document.getElementById('MainWindow'+0));
+
+  //this.test_obj = createElement('object');
+  //this.test_obj.id = 'obj1';
+  //this.test_obj.class('test');
+  //this.test_obj.data = "./practice-6-maze/index.html";
+  //this.test_obj.parent(this.MainWindow);
+  //this.test_obj.size();
+  //console.log(selectAll('.test')[0]);
+  //console.log(document.getElementById('obj1'));
+
+  document.getElementById('MainWindow'+0).innerHTML='<object id="obj1" type="text/html" data="./practice-6-maze/index.html" ></object>';
+  document.getElementById('obj1').style.height = document.getElementById('MainWindow'+0).height+ 'px';
+  document.getElementById('obj1').style.width = '1000px';
+  document.getElementById('obj1').style.position = 'relative';
+  document.getElementById('obj1').style.left = '10px';
+  document.getElementById('obj1').style.top = '10px';
+  //document.getElementById('obj1').style.width = document.getElementById('MainWindow'+0).width + 'px';
+  //document.getElementById('obj1').style.overflowY = 'hidden';
+
+  //MakeHyperlinksDiv(AllElementInsied, document.getElementById('MainWindow'+0));
   //this.MainWindow.size(windowWidth-240, test_num);
 }
 

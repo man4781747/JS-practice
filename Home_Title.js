@@ -47,7 +47,7 @@ function ListButtonEvent() {
     select('#List').remove();
   } else {
     MakeList()
-    console.log(select('#List'));
+    //console.log(select('#List'));
   }
   ReFlash();
 }
