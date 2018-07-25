@@ -1,8 +1,9 @@
-function MazeMake(MazeYSize, MazeXSize) {
-  this.I_CanvasX = 1000;
-  this.I_CanvasY = 1000;
+function MazeMake(MazeYSize, MazeXSize, ParentDiv) {
+  this.I_CanvasX = 800;
+  this.I_CanvasY = 800;
   this.r = floor(this.I_CanvasX/(1.742*(0.5+2*MazeXSize)));
-  createCanvas(this.I_CanvasX, this.I_CanvasY);
+  this.HexMazeCanvas = createCanvas(this.I_CanvasX, this.I_CanvasY);
+  this.HexMazeCanvas.parent(ParentDiv);
   background(0);
   rectMode(CENTER);
   this.MazeXLen = MazeXSize*2-1;
