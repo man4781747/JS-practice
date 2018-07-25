@@ -1,4 +1,5 @@
 var ListWidth
+var Page = 'Home';
 //if (select('#List') !=null) {
 //  ListWidth = 240;
 //}
@@ -31,18 +32,28 @@ function MakeMainWindow(AllElementInsied) {
   //console.log(selectAll('.test')[0]);
   //console.log(document.getElementById('obj1'));
 
-  document.getElementById('MainWindow'+0).innerHTML='<object id="obj1" type="text/html" data="./practice-6-maze/index.html" ></object>';
-  document.getElementById('obj1').style.height = document.getElementById('MainWindow'+0).height+ 'px';
-  document.getElementById('obj1').style.width = '1000px';
-  document.getElementById('obj1').style.position = 'relative';
-  document.getElementById('obj1').style.left = '10px';
-  document.getElementById('obj1').style.top = '10px';
+  WhatIsInTheMainWindow(AllElementInsied);
   //document.getElementById('obj1').style.width = document.getElementById('MainWindow'+0).width + 'px';
   //document.getElementById('obj1').style.overflowY = 'hidden';
 
   //MakeHyperlinksDiv(AllElementInsied, document.getElementById('MainWindow'+0));
   //this.MainWindow.size(windowWidth-240, test_num);
 }
+
+function WhatIsInTheMainWindow(AllElementInsied) {
+  if (Page=='Home') {
+    MakeHyperlinksDiv(AllElementInsied, document.getElementById('MainWindow'+0));
+  } else if (Page=='Maze') {
+    document.getElementById('MainWindow'+0).innerHTML='<object id="obj1" type="text/html" data="./practice-6-maze/index.html" ></object>';
+    document.getElementById('obj1').style.height = document.getElementById('MainWindow'+0).height+ 'px';
+    document.getElementById('obj1').style.width = '1000px';
+    document.getElementById('obj1').style.position = 'relative';
+    document.getElementById('obj1').style.left = '10px';
+    document.getElementById('obj1').style.top = '10px';
+  }
+}
+
+
 
 function MakeHyperlinksDiv(AllElementInsied, ParentDiv) {
   let WindowInsideNum = floor(ParentDiv.offsetWidth/210.);
@@ -99,7 +110,8 @@ function MakeHyperlinkDiv(ElementInside, ParentDiv) {
     //ThisDivSelect.style('borderStyle', "solid");
     ThisDivSelect.style('boxShadow', "0px 0px 1px 2px rgb(200, 200, 200) inset");
     //ThisDivSelect.style('borderColor', 'rgb(240, 240, 240)');
-    ThisDivSelect.mousePressed(x => location.assign(AllElementPath[i]));
+    //ThisDivSelect.mousePressed(x => location.assign(AllElementPath[i]));
+    ThisDivSelect.mousePressed(x => Page='Maze');
     //ThisDivSelect.mouseOver(x => ThisDivSelect.style('background-color', 'rgb('+random(0,255)+', '+random(0,255)+', '+random(0,255)+', 0.2)'));
     //ThisDivSelect.mouseOut(x => ThisDivSelect.style('background-color', 'rgb('+random(0,255)+', '+random(0,255)+', '+random(0,255)+', 0.2)'));
     ThisDivSelect.mouseOver(x => ThisDivSelect.style('background-color', 'rgb(200, 200, 200, 0.2)'));
