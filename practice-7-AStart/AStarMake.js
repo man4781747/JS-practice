@@ -1,127 +1,178 @@
-function AStarMake(YLen, XLen){
-  this.XLen = XLen;
-  this.YLen = YLen;
-  var Ay_Maze = new Array(YLen);
-  for (let i=0;i<YLen;i++){
-    Ay_Maze[i] = new Array(XLen);
-    for (let j=0;j<XLen;j++){
-      Ay_Maze[i][j] = new Ceil(j, i)
-    }
+var MousePositionY, MousePositionX;
+
+function WhenMousePressed() {
+  console.log(MousePositionX, MousePositionY);
+
+  if (MouseType == 'START') {
+    START_X = MousePositionX;
+    START_Y = MousePositionY;
+  } else if (MouseType == 'END') {
+    END_X = MousePositionX;
+    END_Y = MousePositionY;
+  } else if (MouseType == 'Wall') {
+    WallPositionX.push(MousePositionX);
+    WallPositionY.push(MousePositionY);
   }
 
-  this.Ay_Maze = Ay_Maze;
+
+
+  AStarReflash();
+
+}
+
+function AStarMake(YLen, XLen, ParentDiv){
+  this.XLen = XLen;
+  this.YLen = YLen;
+  this.ParentDiv = ParentDiv;
+  this.START_X = null;
+  this.START_Y = null;
+
+
+  let F_L = 800./this.XLen;
+  let F_H = 800./this.YLen;
+  this.AStartCanvas = createCanvas(801, 801);
+  rectMode(CENTER);
+  this.AStartCanvas.parent(this.ParentDiv);
+  this.AStartCanvas.id('AStartCanvas');
+
+  //this.AStartCanvas.mousePressed(x => console.log(this.MousePositionX, this.MousePositionY))
+  this.AStartCanvas.mousePressed(WhenMousePressed)
+
+  var Ay_AStar = new Array(YLen);
+  for (let i=0;i<YLen;i++){
+    Ay_AStar[i] = new Array(XLen);
+    for (let j=0;j<XLen;j++){
+      Ay_AStar[i][j] = new AStarCell(j, i)
+    }
+  }
+  this.Ay_AStar = Ay_AStar;
   this.Ay_Close = new Array(0);
   this.Ay_Open = new Array(0);
   this.I_END = 0;
   this.minLoc;
 
+  this.FindYourNeighbor = function(y, x) {
+    //尋找所在格的鄰居
+    //找頭頂的 y-1, x
+    if (y-1>=0) {
+      this.Ay_AStar[y][x].neighbor.push(this.Ay_AStar[y-1][x]);
+    }
+    //找下方的 y+1, x
+    if (y+1<this.YLen) {
+      this.Ay_AStar[y][x].neighbor.push(this.Ay_AStar[y+1][x]);
+    }
+    //找左方的 y, x+1
+    if (x-1>=0) {
+      this.Ay_AStar[y][x].neighbor.push(this.Ay_AStar[y][x-1]);
+    }
+    //找右方的 y, x+1
+    if (x+1<this.XLen) {
+      this.Ay_AStar[y][x].neighbor.push(this.Ay_AStar[y][x+1]);
+    }
+  }
+
+  for (let i=0;i<this.YLen;i++) {
+    for (let j=0;j<this.XLen;j++) {
+      this.FindYourNeighbor(i, j);
+    }
+  }
+
+  //console.log(Ay_AStar);
+
   this.SetMag = function (y, x, Mag) {
-    this.Ay_Maze[y][x].Magnification = Mag;
+    this.Ay_AStar[y][x].Magnification = Mag;
   }
 
   this.SetStartPoint = function (y, x) {
-    this.Ay_Maze[y][x].Type = 'START';
-    this.START_X = x;
-    this.START_Y = y;
-    this.Ay_Close.push(y*this.XLen+x);
-    this.AddClose(y, x);
+    if (this.START_X == null) {
+      this.Ay_AStar[y][x].Type = 'START';
+      this.START_X = x;
+      this.START_Y = y;
+      this.Ay_Close.push(y*this.XLen+x);
+      this.AddClose(y, x);
+    } else {
+      this.Ay_AStar[this.START_Y][this.START_X].Type = 'Road';
+      this.START_X = x;
+      this.START_Y = y;
+      this.Ay_Close.push(y*this.XLen+x);
+      this.AddClose(y, x);
+    }
+
+
+
   }
   this.SetEndPoint = function (y, x) {
     this.END_x = x;
     this.END_y = y;
-    this.Ay_Maze[y][x].Type = 'END';
+    this.Ay_AStar[y][x].Type = 'END';
     for (let i=0;i<this.YLen;i++){
       for (let j=0;j<this.XLen;j++){
-        //this.Ay_Maze[i][j].h = abs(this.Ay_Maze[i][j].y-y)*10 + abs(this.Ay_Maze[i][j].x-x)*10;
-        this.Ay_Maze[i][j].h = floor(Math.sqrt(Math.pow((this.Ay_Maze[i][j].y-y)*10,2) + Math.pow((this.Ay_Maze[i][j].x-x)*10,2)));
+        this.Ay_AStar[i][j].h = abs(this.Ay_AStar[i][j].y-y)*10 + abs(this.Ay_AStar[i][j].x-x)*10;
+        //this.Ay_AStar[i][j].h = floor(Math.sqrt(Math.pow((this.Ay_AStar[i][j].y-y)*10,2) + Math.pow((this.Ay_AStar[i][j].x-x)*10,2)));
       }
     }
   }
   this.SetWallPoint = function (y, x) {
-    this.Ay_Maze[y][x].Type = 'Wall';
+    //console.log('將 '+(y*this.XLen+x) + ' 設為Wall')
+    this.Ay_AStar[y][x].Type = 'Wall';
   }
 
   this.AddClose = function (y ,x) {
-    if (this.Ay_Maze[y][x].Type == 'END') {
+    if (this.Ay_AStar[y][x].Type == 'END') {
       this.I_END = 1;
     }
 
-    if ( y-1>=0 &&
-         this.Ay_Maze[y-1][x].Type != 'Wall' &&
-         this.Ay_Maze[y-1][x].Type != 'START' &&
-         this.Ay_Open.indexOf((y-1)*this.XLen+x) == -1 &&
-         this.Ay_Close.indexOf((y-1)*this.XLen+x) == -1) {
-      this.Ay_Open.push((y-1)*this.XLen+x);
-      this.Ay_Maze[y-1][x].g = 10*(this.Ay_Maze[y][x].Magnification) + this.Ay_Maze[y][x].g;
-      this.Ay_Maze[y-1][x].f = this.Ay_Maze[y-1][x].h+this.Ay_Maze[y-1][x].g;
-      this.Ay_Maze[y-1][x].parent = this.Ay_Maze[y][x];
-    } else if (y-1>=0 && this.Ay_Open.indexOf((y-1)*this.XLen+x) != -1) {
-      if (this.Ay_Maze[y-1][x].f>(this.Ay_Maze[y][x].f+10*(this.Ay_Maze[y][x].Magnification))) {
-        this.Ay_Maze[y-1][x].parent = this.Ay_Maze[y][x];
-      }
+    for (let i=0;i<this.Ay_AStar[y][x].neighbor.length;i++) {
+      let NeighborChose = this.Ay_AStar[y][x].neighbor[i];
+      //console.log( NeighborChose.Type);
+      if (NeighborChose.Type != 'Wall' && NeighborChose.Type != 'START' &&
+          this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == -1 &&
+          this.Ay_Close.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == -1 ) {
+            //console.log('將 '+(NeighborChose.y*this.XLen+NeighborChose.x) + ' 加入Ay_Open')
+            this.Ay_Open.push(NeighborChose.y*this.XLen+NeighborChose.x);
+            NeighborChose.g = 10*(this.Ay_AStar[y][x].Magnification) + this.Ay_AStar[y][x].g;
+            NeighborChose.f = NeighborChose.h+NeighborChose.g;
+            NeighborChose.parent = this.Ay_AStar[y][x];
+
+          } else if (this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == 1){
+            if (NeighborChose.f>(this.Ay_AStar[y][x].f+10*(this.Ay_AStar[y][x].Magnification))) {
+              NeighborChose.parent = this.Ay_AStar[y][x];
+            }
+          }
+        ////console.log(i)
     }
-    if ( x-1>=0 &&
-         this.Ay_Maze[y][x-1].Type != 'Wall' &&
-         this.Ay_Maze[y][x-1].Type != 'START' &&
-         this.Ay_Open.indexOf(y*this.XLen+x-1) == -1 &&
-         this.Ay_Close.indexOf(y*this.XLen+x-1) == -1) {
-      this.Ay_Open.push(y*this.XLen+x-1);
-      this.Ay_Maze[y][x-1].g = 10*(this.Ay_Maze[y][x].Magnification) + this.Ay_Maze[y][x].g;
-      this.Ay_Maze[y][x-1].f = this.Ay_Maze[y][x-1].h+this.Ay_Maze[y][x-1].g;
-      this.Ay_Maze[y][x-1].parent = this.Ay_Maze[y][x];
-    } else if (x-1>=0 && this.Ay_Open.indexOf((y)*this.XLen+x-1) != -1) {
-      if (this.Ay_Maze[y][x-1].f>this.Ay_Maze[y][x].f+10*(this.Ay_Maze[y][x].Magnification)) {
-        this.Ay_Maze[y][x-1].parent = this.Ay_Maze[y][x];
-      }
-    }
-    if ( y+1<this.YLen &&
-         this.Ay_Maze[y+1][x].Type != 'Wall' &&
-         this.Ay_Maze[y+1][x].Type != 'START' &&
-         this.Ay_Open.indexOf((y+1)*this.XLen+x) == -1 &&
-         this.Ay_Close.indexOf((y+1)*this.XLen+x) == -1) {
-      this.Ay_Open.push((y+1)*this.XLen+x);
-      this.Ay_Maze[y+1][x].g = 10*(this.Ay_Maze[y][x].Magnification) + this.Ay_Maze[y][x].g;
-      this.Ay_Maze[y+1][x].f = this.Ay_Maze[y+1][x].h+this.Ay_Maze[y+1][x].g;
-      this.Ay_Maze[y+1][x].parent = this.Ay_Maze[y][x];
-    } else if (y+1<this.YLen && this.Ay_Open.indexOf((y+1)*this.XLen+x) != -1) {
-      if (this.Ay_Maze[y+1][x].f>this.Ay_Maze[y][x].f+10*(this.Ay_Maze[y][x].Magnification)) {
-        this.Ay_Maze[y+1][x].parent = this.Ay_Maze[y][x];
-      }
-    }
-    if ( x+1<this.XLen &&
-         this.Ay_Maze[y][x+1].Type != 'Wall' &&
-         this.Ay_Maze[y][x+1].Type != 'START' &&
-         this.Ay_Open.indexOf(y*this.XLen+x+1) == -1 &&
-         this.Ay_Close.indexOf(y*this.XLen+x+1) == -1) {
-      this.Ay_Open.push(y*this.XLen+x+1);
-      this.Ay_Maze[y][x+1].g = 10*(this.Ay_Maze[y][x].Magnification) + this.Ay_Maze[y][x].g;
-      this.Ay_Maze[y][x+1].f = this.Ay_Maze[y][x+1].h+this.Ay_Maze[y][x+1].g;
-      this.Ay_Maze[y][x+1].parent = this.Ay_Maze[y][x];
-    } else if (x+1<this.XLen && this.Ay_Open.indexOf((y)*this.XLen+x+1) != -1) {
-      if (this.Ay_Maze[y][x+1].f>this.Ay_Maze[y][x].f+10*(this.Ay_Maze[y][x].Magnification)) {
-        this.Ay_Maze[y][x+1].parent = this.Ay_Maze[y][x];
-      }
-    }
+
   }
 
   this.AddOpen = function () {
     let min = 9999999;
     for (let i=0;i<this.Ay_Open.length;i++) {
-      if (this.Ay_Maze[floor(this.Ay_Open[i]/this.XLen)][this.Ay_Open[i]%this.XLen].f < min) {
-        min = this.Ay_Maze[floor(this.Ay_Open[i]/this.XLen)][this.Ay_Open[i]%this.XLen].f;
+      if (this.Ay_AStar[floor(this.Ay_Open[i]/this.XLen)][this.Ay_Open[i]%this.XLen].f < min) {
+        min = this.Ay_AStar[floor(this.Ay_Open[i]/this.XLen)][this.Ay_Open[i]%this.XLen].f;
         this.minLoc = this.Ay_Open[i];
       }
     }
+    ////console.log(this.minLoc);
     this.Ay_Close.push(this.minLoc);
     this.Ay_Open.splice(this.Ay_Open.indexOf(this.minLoc), 1);
   }
 
   this.AStarGo = function() {
+    try {
+      while (this.I_END == 0 && this.Ay_Open.length>0) {
+        this.AddOpen();
+        this.AddClose(floor(this.minLoc/this.XLen), this.minLoc%this.XLen)
+      }
 
-    while (this.I_END == 0) {
-      this.AddOpen();
-      this.AddClose(floor(this.minLoc/this.XLen), this.minLoc%this.XLen)
+      console.log('計算完成');
+      if (this.Ay_Open.length==0) {
+        console.log('沒解答???');
+      }
+      //console.log('最低步數 : '+);
+    } catch {
+      console.log('沒解答???');
     }
+
 
 /*
     this.AddOpen();
@@ -130,29 +181,27 @@ function AStarMake(YLen, XLen){
   }
 
   this.AStarShow = function() {
-    let F_L = 800./this.XLen;
-    let F_H = 800./this.YLen;
-
+    //console.log('Show');
     background(0);
     fill(255);
     for (let i=0;i<this.YLen;i++){
       for (let j=0;j<this.XLen;j++){
         push();
-        if (this.Ay_Maze[i][j].Type == 'START') {
+        if (this.Ay_AStar[i][j].Type == 'START') {
           fill(255,0,0);
 
-        } else if (this.Ay_Maze[i][j].Type == 'END') {
+        } else if (this.Ay_AStar[i][j].Type == 'END') {
           fill(0,255,0);
-        } else if (this.Ay_Maze[i][j].Type == 'Wall') {
+        } else if (this.Ay_AStar[i][j].Type == 'Wall') {
           fill(0,0,255)
         }
         rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
         fill(0);
 
-        
-        //text(this.Ay_Maze[i][j].h, 5+j*F_L, (F_H-5)+i*F_H);
-        //text(this.Ay_Maze[i][j].g, (F_L-15)+j*F_L, 15+i*F_H);
-        //text(this.Ay_Maze[i][j].f, (F_L-15)+j*F_L, (F_H-5)+i*F_H);
+
+        //text(this.Ay_AStar[i][j].h, 5+j*F_L, (F_H-5)+i*F_H);
+        //text(this.Ay_AStar[i][j].g, (F_L-15)+j*F_L, 15+i*F_H);
+        //text(this.Ay_AStar[i][j].f, (F_L-15)+j*F_L, (F_H-5)+i*F_H);
         //text(i*this.XLen+j, 5+j*F_L, 15+i*F_H);
         pop();
 
@@ -182,7 +231,7 @@ function AStarMake(YLen, XLen){
     rect((this.END_y+0.5)*F_L, (this.END_x+0.5)*F_H, F_L ,F_H);
     pop();
 */
-    LineObj = this.Ay_Maze[this.END_y][this.END_x]
+    LineObj = this.Ay_AStar[this.END_y][this.END_x]
 
     push();
     stroke(255,0,0);
@@ -195,6 +244,21 @@ function AStarMake(YLen, XLen){
       LineObj = LineObj.parent;
     }
 
+    pop();
+
+    push();
+    if (MouseType == 'START') {
+      fill(255,0,0,50);
+    } else if (MouseType == 'END') {
+      fill(0,255,0,50);
+    } else if (MouseType == 'Wall') {
+      fill(0,0,255,50);
+    }
+
+    MousePositionY =  floor(mouseY/F_H);
+    MousePositionX =  floor(mouseX/F_L);
+    //ellipse(MousePositionX*F_L +F_L/2, MousePositionY*F_H +F_H/2, 30 ,30);
+    rect(MousePositionX*F_L +F_L/2, MousePositionY*F_H +F_H/2 , F_L ,F_H);
     pop();
 
   }
