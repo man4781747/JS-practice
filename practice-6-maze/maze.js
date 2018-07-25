@@ -12,7 +12,7 @@ function CreatMazeDiv(){
   MazeP.style('textAlign', 'center')
   MazeP.size(180,30);
 
-  MazeInputLen = createInput('10')
+  MazeInputLen = createInput('3')
   MazeInputLen.position(810, 50);
   MazeInputLen.size(180, 15);
   console.log(MazeInputLen.value());
