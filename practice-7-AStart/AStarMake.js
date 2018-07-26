@@ -1,23 +1,39 @@
 var MousePositionY, MousePositionX;
 
-function WhenMousePressed() {
-  console.log(MousePositionX, MousePositionY);
+function WhenMouseDraggedOrPressed() {
+  if (mouseX>=0&&mouseX<798&&mouseY>=0&&mouseY<798){
+    if (MouseType == 'START') {
+      START_X = MousePositionX;
+      START_Y = MousePositionY;
+    } else if (MouseType == 'END') {
+      END_X = MousePositionX;
+      END_Y = MousePositionY;
+    } else if (MouseType == 'Wall') {
+      if (WallPosition.indexOf(MousePositionY*AStarInputLen.value() + MousePositionX)==-1){
+        WallPosition.push(MousePositionY*AStarInputLen.value() + MousePositionX);
+      }
+    } else if (MouseType == 'Road') {
+      if (WallPosition.indexOf(MousePositionY*AStarInputLen.value() + MousePositionX)!=-1){
+        WallPosition.splice(WallPosition.indexOf(MousePositionY*AStarInputLen.value() + MousePositionX), 1);
+      }
 
-  if (MouseType == 'START') {
-    START_X = MousePositionX;
-    START_Y = MousePositionY;
-  } else if (MouseType == 'END') {
-    END_X = MousePositionX;
-    END_Y = MousePositionY;
-  } else if (MouseType == 'Wall') {
-    WallPositionX.push(MousePositionX);
-    WallPositionY.push(MousePositionY);
+      if (RoadMagSavePosition.indexOf(MousePositionY*AStarInputLen.value() + MousePositionX)==-1){
+        RoadMagSavePosition.push(MousePositionY*AStarInputLen.value() + MousePositionX);
+        RoadMagSave.push(AStarInputMag.value());
+      } else {
+        RoadMagSave[RoadMagSavePosition.indexOf(MousePositionY*AStarInputLen.value() + MousePositionX)] = AStarInputMag.value();
+      }
+    }
+    AStarReflash();
   }
+}
 
+function mouseDragged() {
+  WhenMouseDraggedOrPressed()
+}
 
-
-  AStarReflash();
-
+function mousePressed() {
+  WhenMouseDraggedOrPressed()
 }
 
 function AStarMake(YLen, XLen, ParentDiv){
@@ -36,7 +52,7 @@ function AStarMake(YLen, XLen, ParentDiv){
   this.AStartCanvas.id('AStartCanvas');
 
   //this.AStartCanvas.mousePressed(x => console.log(this.MousePositionX, this.MousePositionY))
-  this.AStartCanvas.mousePressed(WhenMousePressed)
+  //this.AStartCanvas.mouseDragged(WhenMouseDragged)
 
   var Ay_AStar = new Array(YLen);
   for (let i=0;i<YLen;i++){
@@ -82,6 +98,14 @@ function AStarMake(YLen, XLen, ParentDiv){
   this.SetMag = function (y, x, Mag) {
     this.Ay_AStar[y][x].Magnification = Mag;
   }
+
+  this.SetDOOR = function (y1, x1, y2, x2, Par) {
+    this.Ay_AStar[y1][x1].neighbor.push(this.Ay_AStar[y2][x2]);
+    this.Ay_AStar[y1][x1].Type = 'DOOR';
+    this.Ay_AStar[y2][x2].neighbor.push(this.Ay_AStar[y1][x1]);
+    this.Ay_AStar[y2][x2].Type = 'DOOR';
+  }
+
 
   this.SetStartPoint = function (y, x) {
     if (this.START_X == null) {
@@ -182,29 +206,40 @@ function AStarMake(YLen, XLen, ParentDiv){
 
   this.AStarShow = function() {
     //console.log('Show');
-    background(0);
+    background(255);
+    push();
+    stroke(0);
+    line(0, 0, 0, 800);
+    line(0, 0, 800, 0);
+    line(800, 0, 800, 800);
+    line(0, 800, 800, 800);
+    pop();
+
     fill(255);
     for (let i=0;i<this.YLen;i++){
       for (let j=0;j<this.XLen;j++){
         push();
         if (this.Ay_AStar[i][j].Type == 'START') {
           fill(255,0,0);
-
+          rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
         } else if (this.Ay_AStar[i][j].Type == 'END') {
           fill(0,255,0);
+          rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
         } else if (this.Ay_AStar[i][j].Type == 'Wall') {
-          fill(0,0,255)
+          fill(0,0,255);
+          rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
+        } else if (this.Ay_AStar[i][j].Type == 'Road') {
+          fill(0);
+          textSize(15);
+          text(this.Ay_AStar[i][j].Magnification,(j)*F_H+5, (i+1)*F_L-5);
+        } else if (this.Ay_AStar[i][j].Type == 'DOOR') {
+          fill(44,44,125);
+          rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
         }
-        rect((j+0.5)*F_L, (i+0.5)*F_H, F_L ,F_H);
-        fill(0);
 
 
-        //text(this.Ay_AStar[i][j].h, 5+j*F_L, (F_H-5)+i*F_H);
-        //text(this.Ay_AStar[i][j].g, (F_L-15)+j*F_L, 15+i*F_H);
-        //text(this.Ay_AStar[i][j].f, (F_L-15)+j*F_L, (F_H-5)+i*F_H);
-        //text(i*this.XLen+j, 5+j*F_L, 15+i*F_H);
         pop();
-
+/*
         push();
         fill(255,255,0);
         for (let i=0;i<this.Ay_Close.length;i++){
@@ -221,6 +256,9 @@ function AStarMake(YLen, XLen, ParentDiv){
                   (floor(this.Ay_Open[i]/this.XLen)+0.5)*F_H, 10 ,10);
         }
         pop();
+*/
+
+
       }
     }
 /*
@@ -234,8 +272,22 @@ function AStarMake(YLen, XLen, ParentDiv){
     LineObj = this.Ay_AStar[this.END_y][this.END_x]
 
     push();
+    stroke(0);
+    for (let i=1;i<this.YLen;i++){
+      line(0, F_H*i, 800, F_H*i);
+    }
+    for (let j=1;j<this.XLen;j++){
+      line(F_L*j, 0, F_L*j, 800);
+    }
+
+
+    pop();
+    push();
+
+
     stroke(255,0,0);
     strokeWeight(3);
+    stroke(0);
     while (LineObj.parent != null){
       line((LineObj.x+0.5)*F_L,
            (LineObj.y+0.5)*F_H ,
@@ -243,6 +295,7 @@ function AStarMake(YLen, XLen, ParentDiv){
            (LineObj.parent.y+0.5)*F_H);
       LineObj = LineObj.parent;
     }
+
 
     pop();
 
@@ -253,8 +306,9 @@ function AStarMake(YLen, XLen, ParentDiv){
       fill(0,255,0,50);
     } else if (MouseType == 'Wall') {
       fill(0,0,255,50);
+    } else if (MouseType == 'Road') {
+      fill(0,255,255,50);
     }
-
     MousePositionY =  floor(mouseY/F_H);
     MousePositionX =  floor(mouseX/F_L);
     //ellipse(MousePositionX*F_L +F_L/2, MousePositionY*F_H +F_H/2, 30 ,30);
