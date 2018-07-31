@@ -11,10 +11,10 @@ test.on('message',function (message) {
     console.log(message);
 });
 */
-
+var cors = require('cors')
 var express = require("express");
 var app = express();
-
+app.use(cors())
 var server = app.listen(3000);
 
 //app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice/Node/test/public'));
