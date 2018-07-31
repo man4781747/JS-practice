@@ -8,13 +8,14 @@ function ReFlash() {
   for (let i=0;i<Select_Div_1.length;i++) {
     Select_Div_1[i].size(windowWidth,Select_Div_1[i].height)
   }
-  let Select_MainWindow = selectAll('.MainWindow');
 
   if (select('#List') !=null) {
     ListWidth = 240;
   } else {
     ListWidth = 0;
   }
+
+  let Select_MainWindow = selectAll('.MainWindow');
   Select_MainWindow[0].size(windowWidth-ListWidth, windowHeight-100);
   Select_MainWindow[0].position(ListWidth,document.getElementById('Title-1').offsetTop+30);
   //Select_MainWindow[0].remove();

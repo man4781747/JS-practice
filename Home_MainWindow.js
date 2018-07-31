@@ -111,7 +111,8 @@ function MakeHyperlinkDiv(ElementInside, ParentDiv) {
     ThisDivSelect.style('boxShadow', "0px 0px 1px 2px rgb(200, 200, 200) inset");
     //ThisDivSelect.style('borderColor', 'rgb(240, 240, 240)');
     //ThisDivSelect.mousePressed(x => location.assign(AllElementPath[i]));
-    ThisDivSelect.mousePressed(x => Page='Maze');
+    ThisDivSelect.mousePressed(x => WhenMousePressed('Maze'));
+
     //ThisDivSelect.mouseOver(x => ThisDivSelect.style('background-color', 'rgb('+random(0,255)+', '+random(0,255)+', '+random(0,255)+', 0.2)'));
     //ThisDivSelect.mouseOut(x => ThisDivSelect.style('background-color', 'rgb('+random(0,255)+', '+random(0,255)+', '+random(0,255)+', 0.2)'));
     ThisDivSelect.mouseOver(x => ThisDivSelect.style('background-color', 'rgb(200, 200, 200, 0.2)'));
@@ -136,7 +137,6 @@ function MakeHyperlinkDiv(ElementInside, ParentDiv) {
     this.HyperlinkDiv_B.parent(document.getElementById('ID: '+ElementInside[i]));
     //let B_chose = document.getElementById('B_ID: '+ElementInside[i]);
     let B_chose = select('#B_ID: '+ElementInside[i]);
-    console.log(B_chose);
     //B_chose.style.textAlign = 'center'
     //B_chose.style.backgroundColor="#00FF00"
     B_chose.style('textAlign', 'center');
@@ -150,4 +150,11 @@ function MakeHyperlinkDiv(ElementInside, ParentDiv) {
   //this.HyperlinkDiv.parent(ParentDiv);
   //this.HyperlinkDiv.size(210, 118);
 //http://d.blog.xuite.net/d/9/4/0/22726534/blog_1658008/txt/26105228/23.jpg
+}
+
+function WhenMousePressed(S_pressed){
+  Page=S_pressed;
+  let Select_MainWindow = selectAll('.MainWindow');
+  Select_MainWindow[0].remove();
+  MakeMainWindow(AllElement);
 }

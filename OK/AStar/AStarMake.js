@@ -147,23 +147,36 @@ function AStarMake(YLen, XLen, ParentDiv){
     }
 
     for (let i=0;i<this.Ay_AStar[y][x].neighbor.length;i++) {
+      //let ThisPoint = this.Ay_AStar[y][x]
       let NeighborChose = this.Ay_AStar[y][x].neighbor[i];
+      /*
+      if (NeighborChose.y*this.XLen+NeighborChose.x==68){
+        console.log('當前位置('+y+','+x+')');
+        console.log('當前Open('+this.Ay_Open+')');
+        console.log(NeighborChose.y*this.XLen+NeighborChose.x)
+        console.log(this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) != -1);
+      }*/
       //console.log( NeighborChose.Type);
       if (NeighborChose.Type != 'Wall' && NeighborChose.Type != 'START' &&
           this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == -1 &&
           this.Ay_Close.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == -1 ) {
             //console.log('將 '+(NeighborChose.y*this.XLen+NeighborChose.x) + ' 加入Ay_Open')
             this.Ay_Open.push(NeighborChose.y*this.XLen+NeighborChose.x);
-            NeighborChose.g = 10*(this.Ay_AStar[y][x].Magnification) + this.Ay_AStar[y][x].g;
+            NeighborChose.g = 5*(this.Ay_AStar[y][x].Magnification) + 5*NeighborChose.Magnification + this.Ay_AStar[y][x].g;
             NeighborChose.f = NeighborChose.h+NeighborChose.g;
             NeighborChose.parent = this.Ay_AStar[y][x];
 
-          } else if (this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) == 1){
-            if (NeighborChose.f>(this.Ay_AStar[y][x].f+10*(this.Ay_AStar[y][x].Magnification))) {
+          } else if (this.Ay_Open.indexOf(NeighborChose.y*this.XLen+NeighborChose.x) != -1){
+            /*console.log(y+','+x+' |已存在');
+            console.log('已存在舊值= '+NeighborChose.f);
+            console.log('新值= '+(NeighborChose.h+5*(this.Ay_AStar[y][x].Magnification) + 5*NeighborChose.Magnification + this.Ay_AStar[y][x].g));*/
+            if (NeighborChose.f > NeighborChose.h+5*(this.Ay_AStar[y][x].Magnification) + 5*NeighborChose.Magnification + this.Ay_AStar[y][x].g) {
               NeighborChose.parent = this.Ay_AStar[y][x];
+              NeighborChose.g = 5*(this.Ay_AStar[y][x].Magnification) + 5*NeighborChose.Magnification + this.Ay_AStar[y][x].g;
+              NeighborChose.f = NeighborChose.h+NeighborChose.g;
             }
           }
-        ////console.log(i)
+          //console.log(this.Ay_Open)
     }
 
   }
@@ -239,6 +252,16 @@ function AStarMake(YLen, XLen, ParentDiv){
 
 
         pop();
+
+        push();
+        fill(0);
+        textSize(15);
+        text(this.Ay_AStar[i][j].f,(j+0.5)*F_H+5, (i+1)*F_L-5);
+        text(this.Ay_AStar[i][j].h,(j)*F_H+5, (i+0.5)*F_L-5);
+        text(this.Ay_AStar[i][j].g,(j+0.5)*F_H+5, (i+0.5)*F_L-5);
+        pop();
+
+
 /*
         push();
         fill(255,255,0);
@@ -261,7 +284,9 @@ function AStarMake(YLen, XLen, ParentDiv){
 
       }
     }
+
 /*
+
     push();
     fill(0,0,255);
     rect((this.START_Y+0.5)*F_L, (this.START_X+0.5)*F_H, F_L ,F_H);

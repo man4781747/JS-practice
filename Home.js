@@ -4,6 +4,8 @@
 //console.log(MakeTitle_);
 //MakeTitle_ = MakeTitle();
 //function windowResized() {}
+var socket;
+
 var AllElement = ['練習-1: 亂數迷宮產生' ,'練習-2: 亂數迷宮產生(六角)' ,'練習-3: A*', '練習-4: 亂數迷宮+A*',
                   '測試用 無東西-1','測試用 無東西-2','測試用 無東西-3','測試用 無東西-4','測試用 無東西-5',
                   '測試用 無東西-6','測試用 無東西-7','測試用 無東西-8','測試用 無東西-9','測試用 無東西-10',
@@ -23,6 +25,9 @@ var AllElementImage = ['./image/practice_6_maze.PNG',
 ]
 
 function setup() {
+  socket = io.connect('http://127.0.0.1:3000')
+  socket.emit('test_1', 12);
+  socket.emit('test_2', 24);
   noCanvas();
   Go();
 }
