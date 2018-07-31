@@ -38,6 +38,7 @@ app.get("/mypath", function(req, res){
 	res.send("IN THE MYPATH");
 })
 */
+
 var socket = require('socket.io');
 
 var io = socket(server);
@@ -62,6 +63,7 @@ function newConnection(socket) {
 
 
 }
+
 
 
 /*

@@ -24,8 +24,16 @@ var AllElementImage = ['./image/practice_6_maze.PNG',
                        './image/maze+astar.PNG'
 ]
 
+function AllElement_(data) {
+  console.log(data);
+}
+
 function setup() {
-  socket = io.connect('http://127.0.0.1:3000')
+  loadJSON('http://140.116.24.84:3000/Go/AllElements.json',AllElement_);
+
+
+
+  socket = io.connect('http://140.116.24.84:3000/Go/')
   socket.emit('test_1', 12);
   socket.emit('test_2', 24);
   noCanvas();
