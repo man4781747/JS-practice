@@ -43,6 +43,13 @@ function MsgSent(){
 function WhenMsgGet(obj){
 
   let PDivMake = createDiv(obj.who + '說: ' + obj.say);
+  //let test = select('#ChartDiv');
   PDivMake.parent(ChartDiv);
-  PDivMake.size(300,20);
+  PDivMake.style('maxWidth', '300px')
+  PDivMake.style('wordBreak', 'break-all')
+  PDivMake.style('marginBottom', '20px')
+  //PDivMake.size(300,20);
+  let test = document.getElementById("ChartDiv");
+  test.scrollTop = test.scrollHeight+20;
+  console.log(test.scrollHeight);
 }
