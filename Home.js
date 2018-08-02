@@ -31,9 +31,9 @@ function AllElement_(data) {
 function setup() {
   loadJSON('http://140.116.24.84:3000/Go/AllElements.json',AllElement_);
 
-
-
-  socket = io.connect('http://140.116.24.84:3000/Go/')
+  socket = io.connect('http://140.116.24.84:3000')
+  console.log('test')
+  socket.emit('ConnectIn', '我連進來拉');
   socket.emit('test_1', 12);
   socket.emit('test_2', 24);
   noCanvas();
