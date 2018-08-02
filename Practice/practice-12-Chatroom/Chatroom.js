@@ -13,8 +13,11 @@ function setup() {
   ChartDiv.style('background-color', 'rgb(200, 200, 200)')
 
   InputMsg = createInput('你想說啥');
+  InputMsg.id('InputMsg');
   InputMsg.position(10, 600);
   InputMsg.size(300,20);
+  InputMsg.changed(x => MsgSent());
+
   InputWho = createInput('路人');
   InputWho.position(10, 620);
   InputWho.size(50,20);
@@ -36,8 +39,11 @@ function draw() {
 }
 
 function MsgSent(){
-  let test = {'who':InputWho.value(),'say':InputMsg.value()}
+  let test = {'who':InputWho.value(),'say':InputMsg.value()};
   socket.emit('MsgSent', test);
+  let test2 = document.getElementById("InputMsg");
+  console.log(test2);
+  test2.value= '';
 }
 
 function WhenMsgGet(obj){
