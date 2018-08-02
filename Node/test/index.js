@@ -1,71 +1,50 @@
-
-var PythonShell = require('python-shell');
-var options = {
-    mode: 'json',
-    pythonOptions: ['-u'],
-    scriptPath: './',
-};
-/*
-var test =  new PythonShell('test.py', options);
-test.on('message',function (message) {
-    console.log(message);
-});
-*/
 var cors = require('cors')
 var express = require("express");
 var app = express();
 app.use(cors())
-var server = app.listen(3000);
+var server = app.listen(3000, x => console.log('express Listen on 3000'));
 
 //app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice/Node/test/public'));
-app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice'));
+app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice'), x => console.log('進入資料夾: C:/Users/owo/Documents/GitHub/JS-practice'));
+//app.use('/test');
+
 
 app.use(function (req, res, next) {
   console.log('Time:', Date.now());
   next();
 });
-//app.use(express.static('public'));
-/*
+
 app.get('/user/:id', function (req, res) {
   res.send('Hello World!');
 });
 
-app.get("/", function(req, res){
-	res.send("Hello World!!");
-});
-
-app.get("/mypath", function(req, res){
-	res.send("IN THE MYPATH");
-})
-*/
 
 var socket = require('socket.io');
-
 var io = socket(server);
+console.log('Server socket 3000');
+
+
+var ConnectList = []
 
 io.on('connection', newConnection);
-
 function newConnection(socket) {
 	console.log('New connect: '+socket.id);
-	socket.on('test_1', mouseMsg);
-	function mouseMsg(data) {
-      console.log(data);
+  socket.on('ConnectIn', function(msg) {
+    console.log(msg.who +  '說: ' + msg);
+  });
+  socket.emit('SomeOneConnect', 'SomeOneConnect')
+  socket.on('MsgSent', function(msg) {
+    console.log(msg.who + '說: ' + msg.say);
+    io.emit('NewMsg', msg)
+  });
 	}
 
-  socket.on('test_2', GetAllElementInfo);
-  function GetAllElementInfo() {
-    let test =  new PythonShell('test.py', options);
-    //test.send('hello');
-    test.on('message',function (message) {
-        console.log(message);
-    });
-	}
-
-
-}
-
-
-
+/*
+io.on('connection', (socket) => {
+  console.log('New connect: '+socket.id);
+  setTimeout(() => socket.disconnect(true), 5000);
+});
+*/
 /*
 var app = require('express')();
 var server = require('http').Server(app);
