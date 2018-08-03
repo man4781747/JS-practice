@@ -16,8 +16,20 @@ app.use(function (req, res, next) {
 
 app.get('/user/:id', function (req, res) {
   res.send('Hello World!');
+  console.log('有人要GET /user/:id 的資料');
 });
 
+
+app.post('/user/:id', function (req, res) {
+  console.log('有人要POST資料進入 /user/:id ');
+  console.log(req.client.parser)
+  if (req.headers.testheaders) {
+    //io.emit('python_test', req.headers.testheaders);
+    io.emit('python_test', req.server);
+  }
+
+  res.send('OK!!');
+});
 
 var socket = require('socket.io');
 var io = socket(server);

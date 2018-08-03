@@ -1,17 +1,15 @@
 var socket;
 var ChartDiv,PMsg,DivMsg,InputMsg;
 function setup() {
-  noCanvas();
-  //MakeList()
 
-  ChartDiv = createDiv('');
-  ChartDiv.size(300,600);
-  ChartDiv.id('ChartDiv');
-  ChartDiv.position(10, 0);
-  ChartDiv.style('overflow-y', 'auto');
-  ChartDiv.style('overflow-x', 'hidden');
-  ChartDiv.style('background-color', 'rgb(200, 200, 200)')
-
+  MakeMainWindow();
+  for (let i=0;i<10;i++){
+    MakeSpeakWindow(i,'Me');
+  }
+  for (let i=0;i<10;i++){
+    MakeSpeakWindow(i,'nMe');
+  }
+  /*
   InputMsg = createInput('你想說啥');
   InputMsg.id('InputMsg');
   InputMsg.position(10, 600);
@@ -30,14 +28,16 @@ function setup() {
   socket = io.connect('http://140.116.24.84:3000')
   socket.emit('ConnectIn', '我連進來拉');
   socket.on('NewMsg',(obj) => WhenMsgGet(obj));
+  socket.on('python_test', (obj) => createDiv(obj) )
 
   //socket.on('SomeOneConnect', (obj) => createP(obj));
+  */
 }
 
 function draw() {
 
 }
-
+/*
 function MsgSent(){
   let test = {'who':InputWho.value(),'say':InputMsg.value()};
   socket.emit('MsgSent', test);
@@ -59,3 +59,4 @@ function WhenMsgGet(obj){
   test.scrollTop = test.scrollHeight+20;
   console.log(test.scrollHeight);
 }
+*/
