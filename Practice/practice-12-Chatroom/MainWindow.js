@@ -1,4 +1,4 @@
-
+var ChartDivB1, ChartDivB2, ChartDivB3, ChartInput, HeightFst, NameInput;
 function MakeMainWindow(){
   noCanvas();
   ChartDivB1 = createDiv('');
@@ -19,7 +19,7 @@ function MakeMainWindow(){
   ChartDivB2.style('background-color', 'rgb(0, 0, 0)')
 
   ChartDivB3 = createDiv('');
-  ChartDivB3.size(windowWidth-20,windowHeight-100);
+  //ChartDivB3.size(windowWidth-20,windowHeight-100);
   ChartDivB3.id('ChartDivB3');
   ChartDivB3.style('overflow-y', 'auto');
   ChartDivB3.style('overflow-x', 'hidden');
@@ -31,24 +31,38 @@ function MakeMainWindow(){
   MakeInputBox(ChartDivB2);
 }
 function MakeInputBox(ParentDiv) {
-  ChartInput = createElement('textarea');
+  //ChartInput = createElement('textarea');
+  NameInput = createInput('匿名');
+  NameInput.parent(ParentDiv);
+  NameInput.id('NameInput');
+  NameInput.size(60,HeightFst);
+
+  ChartInput = createInput('');
   ChartInput.parent(ParentDiv);
   ChartInput.id('ChartInput');
   document.getElementById('ChartInput').rows = "1"
-  let HeightFst = document.getElementById('ChartInput').clientHeight;
-  ChartInput.size(windowWidth-20,HeightFst);
+  HeightFst = document.getElementById('ChartInput').clientHeight;
+  ChartInput.size(windowWidth-80,HeightFst);
+  ChartDivB3.size(windowWidth-20, windowHeight - HeightFst - 22);
+  NameInput.position(0, ParentDiv.height-ChartInput.height);
   //document.getElementById('ChartInput').width = (windowWidth - 20) + ''
-  ChartInput.position(0, ParentDiv.height-ChartInput.height);
+  ChartInput.position(60, ParentDiv.height-ChartInput.height);
+  //ChartInput.style('position', 'relative')
   ChartInput.style('background-color', 'rgb(255, 255, 255)')
   ChartInput.style('maxHeight', '100px')
   ChartInput.style('resize', 'none')
+  //ChartInput.style('height', ChartInput.height+'px')
+  //ChartInput.style('margin-top', -ChartInput.height+'px')
   //ChartInput.input(x => AutoGrow(ParentDiv,ChartInput,HeightFst));
-  //ChartInput.changed(x => SendMsg());
-  ChartInput.input(x => console.log('test'));
+  ChartInput.changed(x => SendMsg());
+  //ChartInput.input(x => console.log('test'));
 }
 
 function SendMsg(){
-  MakeSpeakWindow(select('#ChartInput').value());
+  //MakeSpeakWindow(select('#ChartInput').value(),'NME');
+  let test = {'who':NameInput.value(),'say':ChartInput.value()};
+  socket.emit('MsgSent', test);
+  select('#ChartInput').value('');
 }
 
 function AutoGrow(InputBoxDiv, InputBox, HeightFst) {
@@ -65,8 +79,18 @@ function AutoGrow(InputBoxDiv, InputBox, HeightFst) {
     }
     //document.getElementById('ChartInput').style.offsetTop = InputBoxDiv.height - InputBox.height - InputChoseMaxHeight+'px';
   } else {
-    InputBox.size(windowWidth-20,HeightFst);
+    InputBox.size(windowWidth-80,HeightFst);
     document.getElementById('ChartInput').style.height = Math.max(document.getElementById('ChartInput').scrollHeight, document.getElementById('ChartInput').clientHeight)+'px';
     InputBox.position(0, InputBoxDiv.height-Math.max(document.getElementById('ChartInput').scrollHeight, document.getElementById('ChartInput').clientHeight));
   }
+}
+
+function ResizeMainindow(){
+  //AutoGrow(ChartDivB3, ChartInput, HeightFst);
+  select('#ChartDivB1').size(windowWidth,windowHeight);
+  select('#ChartDivB2').size(windowWidth-20,windowHeight-20);
+  select('#ChartDivB3').size(windowWidth-20, windowHeight - ChartInput.size().height - 22);
+  ChartInput.position(60, ChartDivB2.size().height-ChartInput.size().height);
+  ChartInput.size(windowWidth-80,ChartInput.size().height);
+  NameInput.position(0, ChartDivB2.size().height-ChartInput.size().height);
 }
