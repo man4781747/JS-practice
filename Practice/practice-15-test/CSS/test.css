@@ -5,16 +5,57 @@
 } */
 
 .MainDiv {
-  width: 210px;
-  height: 300px;
+  /* width: 210px; */
+  width: 180px;
+  /* height: 300px; */
+  height: 240px;
   background-color: #FFEBFF;
-  animation:TestMove 0.5s 1;
   border: 1px solid black;
-  transition-duration: 1s;
+  transition-duration: 0.5s;
+  animation:TestMove, FloatMove;
+  animation-iteration-count: 1, infinite;
+  animation-duration:0.5s, 2s;
+  display: block;
+  border-radius: 15px;
+  box-shadow: 20px 20px #888888;
 }
 
+.MainDiv:hover{
+  width: 198px;
+  height: 262px;
+
+  /* transform-origin: 50% 50%;
+  transform: scale(1.5, 1.5);
+  animation-iteration-count: 1, 1; */
+  /* animation:testFF;
+  animation-iteration-count: infinite;
+  animation-duration:2s;
+  animation-delay:0s ; */
+}
+
+/* .MainDiv:nth-child(3n+2) {
+  animation:TestMove, FloatMove;
+  animation-iteration-count: 1, infinite;
+  animation-duration:0.5s, 2s;
+  animation-delay:0s ,0.5s;
+} */
+
+/* .MainDiv:nth-child(3n+1) {
+  animation:TestMove, FloatMove;
+  animation-iteration-count:1, infinite;
+  animation-duration: 0.5s, 2s;
+  animation-delay: 0s, 0.7s;
+} */
+
+/* .MainDiv:nth-child(3n) {
+  animation:TestMove, FloatMove;
+  animation-iteration-count:1, infinite;
+  animation-duration: 0.5s, 2s;
+  animation-delay: 0s, 0.9s;
+} */
+
 #MainWindowDiv {
-  background-color: #D4EBE8;
+  /* background-color: #D4EBE8; */
   /* transition-duration: 1s; */
   /* transition-property: width; */
   /* animation-iteration-count: 2; */
@@ -24,4 +65,15 @@
 @keyframes TestMove{
     from {transform: scale(0,0);}
     to {transform: scale(1,1);}
+}
+
+@keyframes testFF{
+    from {transform: scale(1,1);}
+    to {transform: scale(2,2);}
+}
+
+@keyframes FloatMove{
+    0% {transform: translateY(0px);}
+    50% {transform: translateY(10px);}
+    100% {transform: translateY(0px);}
 }

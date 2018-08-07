@@ -1,4 +1,4 @@
-var MainDiv;
+var MainWindowDiv;
 
 function setup() {
   noCanvas();
@@ -9,11 +9,21 @@ function setup() {
 
 
   for (let i=0;i<TestData.length;i++){
-    MainDiv = createDiv(i);
-    MainDiv.class('MainDiv')
-    MainDiv.parent(MainWindowDiv);
-    MainDiv.position((i%floor(windowWidth/210))*210,floor(i/floor(windowWidth/210))*300);
+      let MainDiv = createDiv();
+      MainDiv.class('MainDiv')
+      MainDiv.parent(MainWindowDiv);
+      MainDiv.position((i%floor(windowWidth/210))*210,floor(i/floor(windowWidth/210))*300);
 
+      MainDiv.style('animation-delay', '0s, ' + (0.5 + Math.random()) + 's')
+      MainDiv.mouseOver(x => {
+        MainDiv.position((i%floor(windowWidth/210))*210-30,floor(i/floor(windowWidth/210))*300-30);
+      })
+      MainDiv.mouseOut(x => {
+        MainDiv.position((i%floor(windowWidth/210))*210,floor(i/floor(windowWidth/210))*300);
+      })
+
+      MainDiv.child(createDiv('test'))
+      // MainDiv.style('animation-delay', i + 's, 0.5s')
   }
 
 }
