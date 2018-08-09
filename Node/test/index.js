@@ -47,8 +47,19 @@ function newConnection(socket) {
   socket.emit('SomeOneConnect', 'SomeOneConnect')
   socket.on('MsgSent', function(msg) {
     console.log(msg.who + '說: ' + msg.say);
-    io.emit('NewMsg', msg)
+    //io.emit('NewMsg', msg);
+    socket.broadcast.emit('NewMsg', msg);
+    socket.emit('NewMsgMe', msg);
   });
+/*
+  socket.on('MsgSentMe', function(msg) {
+    console.log(msg.who + '說: ' + msg.say);
+    socket.brocast.emit('NewMsg', msg);
+    //io.emit('NewMsg', msg)
+  });
+*/
+
+
 	}
 
 /*
