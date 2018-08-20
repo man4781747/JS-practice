@@ -1,6 +1,8 @@
+var fs = require('fs');
 var cors = require('cors')
 var express = require("express");
 var app = express();
+var AllTempData = [];
 app.use(cors())
 var server = app.listen(3000, x => console.log('express Listen on 3000'));
 
@@ -22,7 +24,7 @@ app.get('/user/:id', function (req, res) {
 
 app.post('/user/:id', function (req, res) {
   console.log('有人要POST資料進入 /user/:id ');
-  console.log(req.client.parser)
+  console.log(req.headers)
   if (req.headers.testheaders) {
     //io.emit('python_test', req.headers.testheaders);
     io.emit('python_test', req.server);
@@ -51,6 +53,12 @@ function newConnection(socket) {
     socket.broadcast.emit('NewMsg', msg);
     socket.emit('NewMsgMe', msg);
   });
+
+  socket.on('RequestLast30Data', function(msg){
+    socket.emit('Last30Data', AllTempData);
+  });
+
+
 /*
   socket.on('MsgSentMe', function(msg) {
     console.log(msg.who + '說: ' + msg.say);
@@ -58,10 +66,21 @@ function newConnection(socket) {
     //io.emit('NewMsg', msg)
   });
 */
+}
 
+app.post('/matlab/:id', function (req, res) {
+  //console.log('matlab-test /user/:id ');
+  console.log(req.headers.test.split(' \t'));
+  let InfoGet = req.headers.test.split(' \t');
+  fs.appendFile(InfoGet[0] + '_' + InfoGet[1] + '_' + InfoGet[2] + '.txt', req.headers.test+'\n');
 
-	}
-
+  // if (AllTempData.length >= 600){
+  //   AllTempData.splice(0,1);
+  // }
+  // AllTempData.push(parseFloat(req.headers.test.split('\t')[0]));
+  // io.emit('NewData', parseFloat(req.headers.test.split('\t')[0]));
+  res.send('OK!!');
+});
 /*
 io.on('connection', (socket) => {
   console.log('New connect: '+socket.id);
