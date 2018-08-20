@@ -5,11 +5,12 @@ var app = express();
 var AllTempData = [];
 app.use(cors())
 var server = app.listen(3000, x => console.log('express Listen on 3000'));
+var socket = require('socket.io');
+var io = socket(server);
+console.log('Server socket 3000');
 
-//app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice/Node/test/public'));
+
 app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice'), x => console.log('進入資料夾: C:/Users/owo/Documents/GitHub/JS-practice'));
-//app.use('/test');
-
 
 app.use(function (req, res, next) {
   console.log('Time:', Date.now());
@@ -25,20 +26,9 @@ app.get('/user/:id', function (req, res) {
 app.post('/user/:id', function (req, res) {
   console.log('有人要POST資料進入 /user/:id ');
   console.log(req.headers)
-  if (req.headers.testheaders) {
-    //io.emit('python_test', req.headers.testheaders);
-    io.emit('python_test', req.server);
-  }
-
   res.send('OK!!');
 });
 
-var socket = require('socket.io');
-var io = socket(server);
-console.log('Server socket 3000');
-
-
-var ConnectList = []
 
 io.on('connection', newConnection);
 function newConnection(socket) {
@@ -55,7 +45,15 @@ function newConnection(socket) {
   });
 
   socket.on('RequestLast30Data', function(msg){
-    socket.emit('Last30Data', AllTempData);
+    fs.readFile('2018_8_20.txt', function (err, data) {
+        if (err) throw err;
+        let AllData = data.toString().split('\n');
+    });
+    let SendData = [];
+    for (i=AllData.length-31;i<AllData.length;i++){
+      SendData.push(AllData[i]);
+    }
+    socket.emit('Last30Data', SendData);
   });
 
 
@@ -73,7 +71,6 @@ app.post('/matlab/:id', function (req, res) {
   console.log(req.headers.test.split(' \t'));
   let InfoGet = req.headers.test.split(' \t');
   fs.appendFile(InfoGet[0] + '_' + InfoGet[1] + '_' + InfoGet[2] + '.txt', req.headers.test+'\n');
-
   // if (AllTempData.length >= 600){
   //   AllTempData.splice(0,1);
   // }
