@@ -9,6 +9,7 @@ var socket = require('socket.io');
 var io = socket(server);
 console.log('Server socket 3000');
 
+var TempDataMaxLen = 1800;
 
 app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice'), x => console.log('進入資料夾: C:/Users/owo/Documents/GitHub/JS-practice'));
 
@@ -29,6 +30,13 @@ app.post('/user/:id', function (req, res) {
   res.send('OK!!');
 });
 
+app.post('/PythonPost/:id', function (req, res) {
+  console.log('南瀛給資料了!! ');
+  console.log(req.headers.sensorinfo)
+  fs.appendFile('2018_8_21_nan.txt', req.headers.sensorinfo+'\n');
+  io.emit('NewData_nan', req.headers.sensorinfo);
+  res.send('OK!!');
+});
 
 io.on('connection', newConnection);
 function newConnection(socket) {
@@ -44,16 +52,35 @@ function newConnection(socket) {
     socket.emit('NewMsgMe', msg);
   });
 
-  socket.on('RequestLast30Data', function(msg){
+  socket.on('RequestLast600Data', function(msg){
     fs.readFile('2018_8_20.txt', function (err, data) {
         if (err) throw err;
         let AllData = data.toString().split('\n');
+        let SendData = [];
+        let DataLen = TempDataMaxLen;
+        if (AllData.length < TempDataMaxLen){
+          DataLen = AllData.length;
+        }
+        for (let i=AllData.length-DataLen;i<AllData.length;i++){
+          SendData.push(AllData[i]);
+        }
+        socket.emit('Last600Data', SendData);
     });
-    let SendData = [];
-    for (i=AllData.length-31;i<AllData.length;i++){
-      SendData.push(AllData[i]);
-    }
-    socket.emit('Last30Data', SendData);
+
+    fs.readFile('2018_8_21_nan.txt', function (err, data) {
+        if (err) throw err;
+        let AllData = data.toString().split('\n');
+        let SendData = [];
+        let DataLen = TempDataMaxLen;
+        if (AllData.length < TempDataMaxLen){
+          DataLen = AllData.length;
+        }
+        for (let i=AllData.length-DataLen;i<AllData.length;i++){
+          SendData.push(AllData[i]);
+        }
+        socket.emit('Last600Data_nan', SendData);
+    });
+
   });
 
 
@@ -70,12 +97,13 @@ app.post('/matlab/:id', function (req, res) {
   //console.log('matlab-test /user/:id ');
   console.log(req.headers.test.split(' \t'));
   let InfoGet = req.headers.test.split(' \t');
-  fs.appendFile(InfoGet[0] + '_' + InfoGet[1] + '_' + InfoGet[2] + '.txt', req.headers.test+'\n');
+  // fs.appendFile(InfoGet[0] + '_' + InfoGet[1] + '_' + InfoGet[2] + '.txt', req.headers.test+'\n');
+  fs.appendFile('2018_8_20.txt', req.headers.test+'\n');
   // if (AllTempData.length >= 600){
   //   AllTempData.splice(0,1);
   // }
   // AllTempData.push(parseFloat(req.headers.test.split('\t')[0]));
-  // io.emit('NewData', parseFloat(req.headers.test.split('\t')[0]));
+  io.emit('NewData', req.headers.test);
   res.send('OK!!');
 });
 /*

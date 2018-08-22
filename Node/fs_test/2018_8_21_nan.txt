@@ -1,0 +1,14 @@
+2018xxx8xxx21xxx16xxx26xxx32xxx989.92xxx87.09xxx27.98xxx\r
+2018xxx8xxx21xxx16xxx26xxx42xxx989.90xxx87.20xxx27.98xxx\r
+2018xxx8xxx21xxx16xxx26xxx52xxx989.94xxx87.23xxx27.99xxx\r
+2018xxx8xxx21xxx16xxx27xxx2xxx989.94xxx87.36xxx28.00xxx\r
+2018xxx8xxx21xxx16xxx27xxx22xxx989.97xxx87.48xxx28.02xxx\r
+2018xxx8xxx21xxx16xxx27xxx32xxx989.95xxx87.54xxx28.01xxx\r
+2018xxx8xxx21xxx16xxx27xxx42xxx989.94xxx87.67xxx28.01xxx\r
+2018xxx8xxx21xxx16xxx27xxx52xxx989.97xxx87.70xxx28.02xxx\r
+2018xxx8xxx21xxx16xxx28xxx2xxx990.00xxx87.75xxx28.03xxx\r
+2018xxx8xxx21xxx16xxx28xxx12xxx989.96xxx87.82xxx28.04xxx\r
+2018xxx8xxx21xxx16xxx28xxx22xxx989.96xxx87.93xxx28.04xxx\r
+2018xxx8xxx21xxx16xxx28xxx32xxx989.99xxx87.92xxx28.06xxx\r
+2018xxx8xxx21xxx16xxx28xxx42xxx989.99xxx87.97xxx28.07xxx\r
+2018xxx8xxx21xxx16xxx28xxx52xxx989.99xxx88.01xxx28.06xxx\r

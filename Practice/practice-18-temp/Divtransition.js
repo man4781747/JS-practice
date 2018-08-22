@@ -3,10 +3,11 @@ var socket;
 var AllData_Y,AllData_M,AllData_D,AllData_H,AllData_Min,AllData_S;
 var AllData_Time;
 var AllData_Temp1,AllData_Temp2,AllData_Temp3,AllData_Temp4;
+var NanData_Time, NanData_Temp;
 var trace;
 var test_num;
 socket = io.connect('http://140.116.24.84:3000');
-var test_str = '6.60\t 25.21\t 24'
+
 
 function padLeft(str, len){
   if (str.length >= len) {
@@ -21,28 +22,37 @@ function setup() {
   //createCanvas(1000, 1000);
   noCanvas();
   test_num = 0;
-  MainWindowDiv = createDiv();
-  MainWindowDiv.id('Temp1');
+  createElement('H1','慶齡中心');
+  createElement('H2','冷氣口');
+  createDiv().id('Temp1');
   createDiv().id('Temp2');
   createDiv().id('Temp3');
   createDiv().id('Temp4');
-
+  createElement('H1','南瀛小屋');
+  createDiv().id('Nan_Temp1');
+  createDiv().id('Nan_Temp2');
   socket.emit('ConnectIn', '我連進來拉');
   socket.emit('RequestLast600Data', '');
-  socket.on('Last600Data',(obj) => {DataArrange(obj);
-                                  });
-  socket.on('NewData', (obj) => UpdateData(obj));
+  socket.on('Last600Data',(obj) => {DataArrange(obj);});
+  socket.on('Last600Data_nan',(obj) => {DataArrangeNan(obj);});
 
+  socket.on('NewData', (obj) => UpdateData(obj));
+  socket.on('NewData_nan', (obj) => Nan_UpdateData(obj));
 
 }
 
+function DataArrangeNan(obj){
+  NanData_Time = [];
+  NanData_Temp = [];
+  for (let i=0;i<obj.length-1;i++){
+    let Info_ = obj[i].split('xxx')
+    NanData_Time.push(Info_[0]+'-'+padLeft(Info_[1],2)+'-'+padLeft(Info_[2],2)+' '+padLeft(Info_[3],2)+':'+padLeft(Info_[4],2)+':'+padLeft(Info_[5],2));
+    NanData_Temp.push(parseFloat(Info_[8]));
+  }
+  Nan_DrawUpdate();
+}
+
 function DataArrange(obj){
-  // AllData_Y = [];
-  // AllData_M = [];
-  // AllData_D = [];
-  // AllData_H = [];
-  // AllData_Min = [];
-  // AllData_S = [];
   AllData_Temp1 = [];
   AllData_Temp2 = [];
   AllData_Temp3 = [];
@@ -68,9 +78,9 @@ function DataArrange(obj){
 }
 
 function UpdateData(NewObj){
-  console.log(NewObj);
+  // console.log(NewObj);
   let DataSolit = NewObj.split(' \t');
-  if (AllData_Time.length>=600) {
+  if (AllData_Time.length>=1800) {
     // AllData_Y.splice(0,1);
     // AllData_M.splice(0,1);
     // AllData_D.splice(0,1);
@@ -96,6 +106,17 @@ function UpdateData(NewObj){
   AllData_Temp3.push(parseFloat(DataSolit[8]));
   AllData_Temp4.push(parseFloat(DataSolit[9]));
   DrawUpdate();
+}
+
+function Nan_UpdateData(NewObj){
+  if (NanData_Time.length>=1600){
+    NanData_Time.splice(0,1);
+    NanData_Temp.splice(0,1);
+  }
+  let Info_ = NewObj.split('xxx')
+  NanData_Time.push(Info_[0]+'-'+padLeft(Info_[1],2)+'-'+padLeft(Info_[2],2)+' '+padLeft(Info_[3],2)+':'+padLeft(Info_[4],2)+':'+padLeft(Info_[5],2));
+  NanData_Temp.push(parseFloat(Info_[8]));
+  Nan_DrawUpdate();
 }
 
 function DrawUpdate(){
@@ -124,4 +145,15 @@ function DrawUpdate(){
   Plotly.newPlot('Temp2', [trace2]);
   Plotly.newPlot('Temp3', [trace3]);
   Plotly.newPlot('Temp4', [trace4]);
+}
+
+function Nan_DrawUpdate(){
+  let Nan_trace1 = {
+    x: NanData_Time,
+    y: NanData_Temp,
+    type: 'scatter'
+  };
+
+  Plotly.newPlot('Nan_Temp1', [Nan_trace1]);
+
 }
