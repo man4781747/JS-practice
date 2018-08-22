@@ -1,11 +1,12 @@
 var MainWindowDiv;
-var socket;
 var AllData_Y,AllData_M,AllData_D,AllData_H,AllData_Min,AllData_S;
 var AllData_Time;
 var AllData_Temp1,AllData_Temp2,AllData_Temp3,AllData_Temp4;
 var NanData_Time, NanData_Temp;
 var trace;
 var test_num;
+
+var socket;
 socket = io.connect('http://140.116.24.84:3000');
 
 
@@ -18,19 +19,20 @@ function padLeft(str, len){
 }
 
 function setup() {
-  AllData = [];
-  //createCanvas(1000, 1000);
-  noCanvas();
-  test_num = 0;
-  createElement('H1','慶齡中心');
-  createElement('H2','冷氣口');
-  createDiv().id('Temp1');
-  createDiv().id('Temp2');
-  createDiv().id('Temp3');
-  createDiv().id('Temp4');
-  createElement('H1','南瀛小屋');
-  createDiv().id('Nan_Temp1');
-  createDiv().id('Nan_Temp2');
+  // AllData = [];
+  // //createCanvas(1000, 1000);
+  // noCanvas();
+  // test_num = 0;
+  // createElement('H1','慶齡中心');
+  // createElement('H2','冷氣口');
+  // createDiv().id('Temp1');
+  // createDiv().id('Temp2');
+  // createDiv().id('Temp3');
+  // createDiv().id('Temp4');
+  // createElement('H1','南瀛小屋');
+  // createDiv().id('Nan_Temp1');
+  // createDiv().id('Nan_Temp2');
+  MainWindow();
   socket.emit('ConnectIn', '我連進來拉');
   socket.emit('RequestLast600Data', '');
   socket.on('Last600Data',(obj) => {DataArrange(obj);});
@@ -141,10 +143,10 @@ function DrawUpdate(){
     type: 'scatter'
   };
 
-  Plotly.newPlot('Temp1', [trace1]);
-  Plotly.newPlot('Temp2', [trace2]);
-  Plotly.newPlot('Temp3', [trace3]);
-  Plotly.newPlot('Temp4', [trace4]);
+  Plotly.newPlot('PlotDiv'+StationInfo[0].sensors.Temp[0], [trace1],layout);
+  Plotly.newPlot('PlotDiv'+StationInfo[0].sensors.Temp[1], [trace2],layout);
+  Plotly.newPlot('PlotDiv'+StationInfo[0].sensors.Temp[2], [trace3],layout);
+  Plotly.newPlot('PlotDiv'+StationInfo[0].sensors.Temp[3], [trace4],layout);
 }
 
 function Nan_DrawUpdate(){
@@ -154,6 +156,6 @@ function Nan_DrawUpdate(){
     type: 'scatter'
   };
 
-  Plotly.newPlot('Nan_Temp1', [Nan_trace1]);
+  Plotly.newPlot('PlotDiv'+StationInfo[1].sensors.Temp[0], [Nan_trace1],layout);
 
 }

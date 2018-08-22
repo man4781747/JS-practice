@@ -1,79 +1,53 @@
-/* body {
+body {
   background-color: #D4EBE8;
   width: 100%;
   height: 100%;
+  margin: 0;
+}
+
+/* h5 {
+  font-size: 20px;
 } */
 
-.MainDiv {
-  /* width: 210px; */
-  width: 180px;
-  /* height: 300px; */
-  height: 240px;
+.Station {
+  width: 100%;
   background-color: #FFEBFF;
-  border: 1px solid black;
   transition-duration: 0.5s;
-  animation:TestMove, FloatMove;
-  animation-iteration-count: 1, infinite;
-  animation-duration:0.5s, 2s;
-  display: block;
-  border-radius: 15px;
-  box-shadow: 20px 20px #888888;
+  margin-top: : 10px;
+  margin-bottom: 10px;
+  margin-left: 0px;
 }
 
-.MainDiv:hover{
-  width: 198px;
-  height: 262px;
-
-  /* transform-origin: 50% 50%;
-  transform: scale(1.5, 1.5);
-  animation-iteration-count: 1, 1; */
-  /* animation:testFF;
-  animation-iteration-count: infinite;
-  animation-duration:2s;
-  animation-delay:0s ; */
+.Sensor {
+  background-color: #EBEBFF;
+  width: calc(100vw - 0px);
+  margin-top: : 10px;
+  margin-bottom: 10px;
+  height: 330px;
 }
 
-/* .MainDiv:nth-child(3n+2) {
-  animation:TestMove, FloatMove;
-  animation-iteration-count: 1, infinite;
-  animation-duration:0.5s, 2s;
-  animation-delay:0s ,0.5s;
-} */
-
-/* .MainDiv:nth-child(3n+1) {
-  animation:TestMove, FloatMove;
-  animation-iteration-count:1, infinite;
-  animation-duration: 0.5s, 2s;
-  animation-delay: 0s, 0.7s;
-} */
-
-/* .MainDiv:nth-child(3n) {
-  animation:TestMove, FloatMove;
-  animation-iteration-count:1, infinite;
-  animation-duration: 0.5s, 2s;
-  animation-delay: 0s, 0.9s;
-} */
-
-#MainWindowDiv {
-  /* background-color: #D4EBE8; */
-  /* transition-duration: 1s; */
-  /* transition-property: width; */
-  /* animation-iteration-count: 2; */
+.ControlTable {
+  background-color: #BBBBFF;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left: 0;
 }
 
-
-@keyframes TestMove{
-    from {transform: scale(0,0);}
-    to {transform: scale(1,1);}
+.PlotDiv {
+  background-color: #FFBBFF;
+  height: 300px;
+  position: absolute;
+  width: calc(100vw - 320px);
+  right: 0;
+  /* padding-top: 10px; */
 }
 
-@keyframes testFF{
-    from {transform: scale(1,1);}
-    to {transform: scale(2,2);}
-}
-
-@keyframes FloatMove{
-    0% {transform: translateY(0px);}
-    50% {transform: translateY(10px);}
-    100% {transform: translateY(0px);}
+.NowTemp {
+  background-color: #FFBBFF;
+  height: 200px;
+  text-align:center;
+  line-height:200px;
+  font-family : Microsoft JhengHei;
+  font-size: 50px;
 }
