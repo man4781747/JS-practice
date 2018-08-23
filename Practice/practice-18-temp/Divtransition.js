@@ -6,7 +6,6 @@ var NanData_Time, NanData_Temp, NanData_Press, NanData_Hum;
 var trace;
 var test_num;
 
-var DataLenMax = 8640;
 
 var socket;
 socket = io.connect('http://140.116.24.84:3000');
@@ -36,7 +35,8 @@ function setup() {
   // createDiv().id('Nan_Temp2');
   MainWindow();
   socket.emit('ConnectIn', '我連進來拉');
-  socket.emit('RequestLast600Data', DataLenMax);
+  console.log(DataLenMax[0]);
+  socket.emit('RequestLast600Data', DataLenMax[0]);
   socket.on('Last600Data',(obj) => {DataArrange(obj);});
   socket.on('Last600Data_nan',(obj) => {DataArrangeNan(obj);});
 
@@ -124,7 +124,8 @@ function UpdateData(NewObj){
   AllData_Temp2.push(parseFloat(DataSolit[7]));
   AllData_Temp3.push(parseFloat(DataSolit[8]));
   AllData_Temp4.push(parseFloat(DataSolit[9]));
-  AllData_Press.push(parseFloat(DataSolit[10]));
+  DataSolit[10] = parseFloat(DataSolit[10])/100.;
+  AllData_Press.push(DataSolit[10]);
   AllData_Hum1.push(parseFloat(DataSolit[11]));
   AllData_Hum2.push(parseFloat(DataSolit[12]));
 

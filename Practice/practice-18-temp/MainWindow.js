@@ -4,19 +4,33 @@ function padLeft(str, len){if (str.length >= len) {return str;} else {return pad
 var socket;
 socket = io.connect('http://140.116.24.84:3000');
 
+var TimeLenChoseAll = [];
+var DataLenMax = [];
+
 function MainWindow() {
   noCanvas();
-  console.log('test')
   for (let i = 0;i<StationInfo.length;i++){
+    DataLenMax[i] = 8640;
     let DivMake;
+    TimeLenChoseAll[i] = '2';
     DivMake = createDiv()
     DivMake.id(StationInfo[i].name);
     DivMake.class('Station');
     createElement('h1',StationInfo[i].name).parent(DivMake)
+
     for (let k=0;k<3;k++){
       let TimeLenChose = createDiv();
+      TimeLenChose.html(TimeLenData[0].name[k]);
       TimeLenChose.class('TimeLenChose');
       TimeLenChose.id('TimeLenChose'+StationInfo[i].name+k);
+      TimeLenChose.parent(DivMake);
+      let TimeLenChecked = createElement('TimeLenChecked');
+      TimeLenChecked.class('TimeLenChecked'+i);
+      TimeLenChecked.parent(TimeLenChose);
+      TimeLenChose.mousePressed(x => {//TimeLenChecked.style('z-index','3');
+                                      TimeLenChoseAll[i] = TimeLenChose.html()[0];
+                                      ChangeTimeLen(i);
+                                      console.log(TimeLenChoseAll[i]);});
     }
 
     for (let j=0;j<StationInfo[i].sensors.length;j++){
@@ -56,6 +70,27 @@ function MainWindow() {
   }
 }
 
+function ChangeTimeLen(i){
+  let TimeLenCheckedSelect = selectAll('.TimeLenChecked'+i);
+  if (TimeLenChoseAll[i]== '2') {
+    DataLenMax[i] = TimeLenData[0].num[2];
+    TimeLenCheckedSelect[0].style('z-index','1');
+    TimeLenCheckedSelect[1].style('z-index','1');
+    TimeLenCheckedSelect[2].style('z-index','3');
+  } else if (TimeLenChoseAll[i]== '1') {
+    DataLenMax[i] = TimeLenData[0].num[0];
+    TimeLenCheckedSelect[0].style('z-index','3');
+    TimeLenCheckedSelect[1].style('z-index','1');
+    TimeLenCheckedSelect[2].style('z-index','1');
+  } else if (TimeLenChoseAll[i]== '6') {
+    DataLenMax[i] = TimeLenData[0].num[1];
+    TimeLenCheckedSelect[0].style('z-index','1');
+    TimeLenCheckedSelect[1].style('z-index','3');
+    TimeLenCheckedSelect[2].style('z-index','1');
+  };
+  socket.emit('RequestLast600Data', DataLenMax[0]);
+  // console.log(i+' '+TimeLenChoseAll[i] + DataLenMax[i])
+}
 // function setup() {
 //   noCanvas();
 //   console.log('test')

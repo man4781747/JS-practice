@@ -5,6 +5,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   font-family : Microsoft JhengHei;
+  color: rgb(170, 120, 100);
 }
 
 h5 {
@@ -32,6 +33,54 @@ h1 {
   /* height: 10px;
   margin: 0px; */
 }
+
+
+
+.TimeLenChose {
+  /* width: 30px;
+  height: 30px;
+  background-color: rgb(170, 120, 100); */
+  font-size: 30px;
+  position: relative;
+  float:right;
+  margin-right: 55px;
+  top : -65px;
+}
+
+.TimeLenChose:hover::after {
+  background-color: rgb(170, 120, 100);
+}
+
+TimeLenChecked {
+  background-color: rgb(170, 120, 100);
+  width: 40px;
+  height: 40px;
+  position:absolute;
+  left : -50px;
+  z-index:1;
+}
+
+.TimeLenChose::before {
+  content: '';
+  position:absolute;
+  width: 40px;
+  height: 40px;
+  left: -50px;
+  background-color: rgb(170, 120, 100);
+  z-index:2;
+}
+
+.TimeLenChose::after {
+  content: '';
+  position:absolute;
+  width: 30px;
+  height: 30px;
+  left: -45px;
+  top: 5px;
+  background-color: rgb(0, 0, 0);
+  z-index:2;
+}
+
 
 .Station {
   width: 100%;

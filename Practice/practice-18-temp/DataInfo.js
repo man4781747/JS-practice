@@ -33,6 +33,21 @@ StationInfo = [{
       ' %',
       ' <sup>o</sup>C',
     ]
-  },
+  }
+]
 
+var TimeLenData;
+TimeLenData = [
+  {
+    'name':[
+      '1小時內',
+      '6小時內',
+      '24小時內'
+    ],
+    'num':[
+      1*60*6,
+      6*60*6,
+      24*60*6
+    ]
+  }
 ]
