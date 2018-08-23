@@ -53,12 +53,14 @@ function newConnection(socket) {
   });
 
   socket.on('RequestLast600Data', function(msg){
+    console.log('有人要求溫度資料!!!!');
+    console.log(msg)
     fs.readFile('2018_8_20.txt', function (err, data) {
         if (err) throw err;
         let AllData = data.toString().split('\n');
         let SendData = [];
-        let DataLen = TempDataMaxLen;
-        if (AllData.length < TempDataMaxLen){
+        let DataLen = msg;
+        if (AllData.length < msg){
           DataLen = AllData.length;
         }
         for (let i=AllData.length-DataLen;i<AllData.length;i++){
@@ -71,8 +73,8 @@ function newConnection(socket) {
         if (err) throw err;
         let AllData = data.toString().split('\n');
         let SendData = [];
-        let DataLen = TempDataMaxLen;
-        if (AllData.length < TempDataMaxLen){
+        let DataLen = msg;
+        if (AllData.length < msg){
           DataLen = AllData.length;
         }
         for (let i=AllData.length-DataLen;i<AllData.length;i++){
