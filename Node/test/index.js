@@ -13,10 +13,10 @@ var TempDataMaxLen = 1800;
 
 app.use('/Go',express.static('C:/Users/owo/Documents/GitHub/JS-practice'), x => console.log('進入資料夾: C:/Users/owo/Documents/GitHub/JS-practice'));
 
-app.use(function (req, res, next) {
-  console.log('Time:', Date.now());
-  next();
-});
+// app.use(function (req, res, next) {
+//   console.log('Time:', Date.now());
+//   next();
+// });
 
 app.get('/user/:id', function (req, res) {
   res.send('Hello World!');
@@ -30,11 +30,17 @@ app.post('/user/:id', function (req, res) {
   res.send('OK!!');
 });
 
+app.post('/matlab/:id', function (req, res) {
+  let InfoGet = req.headers.test.split(' \t');
+  fs.appendFile('Ching-Ling.txt', req.headers.test+'\n');
+  io.emit('NewData', ['Ching-Ling', req.headers.test]);
+  res.send('OK!!');
+});
+
 app.post('/PythonPost/:id', function (req, res) {
-  console.log('南瀛給資料了!! ');
-  console.log(req.headers.sensorinfo)
-  fs.appendFile('2018_8_21_nan.txt', req.headers.sensorinfo+'\n');
-  io.emit('NewData_nan', req.headers.sensorinfo);
+  fs.appendFile('Nan-Ying.txt', req.headers.sensorinfo+'\n');
+  console.log('Nan-Ying')
+  io.emit('NewData', ['Nan-Ying', req.headers.sensorinfo]);
   res.send('OK!!');
 });
 
@@ -54,37 +60,49 @@ function newConnection(socket) {
 
   socket.on('RequestLast600Data', function(msg){
     console.log('有人要求溫度資料!!!!');
-    console.log(msg)
-    fs.readFile('2018_8_20.txt', function (err, data) {
-        if (err) throw err;
-        let AllData = data.toString().split('\n');
-        let SendData = [];
-        let DataLen = msg;
-        if (AllData.length < msg){
-          DataLen = AllData.length;
-        }
-        for (let i=AllData.length-DataLen;i<AllData.length;i++){
-          SendData.push(AllData[i]);
-        }
-        socket.emit('Last600Data', SendData);
+    fs.readFile(msg[0]+'.txt', function(err, data) {
+      if (err) throw err;
+      let AllData = data.toString().split('\n');
+      let SendData = [];
+      let DataLen = msg[1];
+      if (AllData.length < msg){
+        DataLen = AllData.length;
+      }
+      for (let i=AllData.length-DataLen;i<AllData.length;i++){
+        SendData.push(AllData[i]);
+      }
+      socket.emit('LastData', [msg[0], SendData]);
     });
 
-    fs.readFile('2018_8_21_nan.txt', function (err, data) {
-        if (err) throw err;
-        let AllData = data.toString().split('\n');
-        let SendData = [];
-        let DataLen = msg;
-        if (AllData.length < msg){
-          DataLen = AllData.length;
-        }
-        for (let i=AllData.length-DataLen;i<AllData.length;i++){
-          SendData.push(AllData[i]);
-        }
-        socket.emit('Last600Data_nan', SendData);
-    });
+    // fs.readFile('Ching-Ling.txt', function (err, data) {
+    //     if (err) throw err;
+    //     let AllData = data.toString().split('\n');
+    //     let SendData = [];
+    //     let DataLen = msg[1];
+    //     if (AllData.length < msg){
+    //       DataLen = AllData.length;
+    //     }
+    //     for (let i=AllData.length-DataLen;i<AllData.length;i++){
+    //       SendData.push(AllData[i]);
+    //     }
+    //     socket.emit('Last600Data', SendData);
+    // });
+    //
+    // fs.readFile('Nan-Ying.txt', function (err, data) {
+    //     if (err) throw err;
+    //     let AllData = data.toString().split('\n');
+    //     let SendData = [];
+    //     let DataLen = msg[1];
+    //     if (AllData.length < msg){
+    //       DataLen = AllData.length;
+    //     }
+    //     for (let i=AllData.length-DataLen;i<AllData.length;i++){
+    //       SendData.push(AllData[i]);
+    //     }
+    //     socket.emit('Last600Data_nan', SendData);
+    // });
 
   });
-
 
 /*
   socket.on('MsgSentMe', function(msg) {
@@ -95,19 +113,6 @@ function newConnection(socket) {
 */
 }
 
-app.post('/matlab/:id', function (req, res) {
-  //console.log('matlab-test /user/:id ');
-  console.log(req.headers.test.split(' \t'));
-  let InfoGet = req.headers.test.split(' \t');
-  // fs.appendFile(InfoGet[0] + '_' + InfoGet[1] + '_' + InfoGet[2] + '.txt', req.headers.test+'\n');
-  fs.appendFile('2018_8_20.txt', req.headers.test+'\n');
-  // if (AllTempData.length >= 600){
-  //   AllTempData.splice(0,1);
-  // }
-  // AllTempData.push(parseFloat(req.headers.test.split('\t')[0]));
-  io.emit('NewData', req.headers.test);
-  res.send('OK!!');
-});
 /*
 io.on('connection', (socket) => {
   console.log('New connect: '+socket.id);

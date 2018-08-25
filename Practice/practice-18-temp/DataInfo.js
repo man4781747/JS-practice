@@ -2,6 +2,7 @@ var StationInfo;
 
 StationInfo = [{
     'name': 'Ching-Ling',
+    'splitstr': ' \t',
     'sensors': [
       '冷氣口溫度',
       '機櫃前方溫度',
@@ -23,6 +24,7 @@ StationInfo = [{
   },
   {
     'name': 'Nan-Ying',
+    'splitstr': 'xxx',
     'sensors': [
       '氣壓',
       '濕度',
