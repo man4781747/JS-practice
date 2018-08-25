@@ -66,6 +66,9 @@ function SensorMake(DivMake,i){
                                     TimeLenChoseAll[i] = TimeLenChose.html()[0];
                                     ChangeTimeLen(i);});
   }
+  let test_ = createDiv('');
+  test_.class('test_')
+  test_.parent(test);
 
   for (let j=0;j<StationInfo[i].sensors.length;j++){
     let SensorDiv;
@@ -87,7 +90,8 @@ function SensorMake(DivMake,i){
     TheLatestData(i, j);
 
     SensorDiv.mousePressed(x => {
-      if (SensorDiv.size().width == 357) {
+      console.log(SensorDiv.size().width);
+      if (SensorDiv.size().width <= 500) {
         SensorDiv.style('width','calc(100vw - 80px)');
         PlotDiv = createDiv();
         PlotDiv.id('PlotDiv'+StationInfo[i].sensors[j])
